@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Hexalyser.Messages;
@@ -20,6 +21,15 @@ namespace Hexalyser.ViewModels
         {
             get => Document.FileName;
             set => Set(Document.FileName, ref value);
+        }
+        public List<Element> Elements
+        {
+            get => Document.Elements;
+        }
+
+        public string Length
+        {
+            get => $"{Document.Length} bytes";
         }
         #endregion Properties
 
