@@ -1,0 +1,12 @@
+﻿<Application x:Class="Hexalyser.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Hexalyser"
+             xmlns:vm="clr-namespace:Hexalyser.ViewModels"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <vm:ViewModelLocator x:Key="Locator" xmlns:vm="clr-namespace:Hexalyser.ViewModels" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
