@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Hexalyser.Messages;
 using Hexalyser.Models;
+using Hexalyser.Models.Elements;
 
 namespace Hexalyser.ViewModels
 {
@@ -22,15 +23,12 @@ namespace Hexalyser.ViewModels
             get => Document.FileName;
             set => Set(Document.FileName, ref value);
         }
-        public List<Element> Elements
-        {
-            get => Document.Elements;
-        }
 
-        public string Length
-        {
-            get => $"{Document.Length} bytes";
-        }
+        public string ElementsPropertyName = "Elements";
+        public List<Element> Elements => Document.Elements;
+
+        public string Length => $"{Document.Length} bytes";
+
         #endregion Properties
 
         #region Commands
@@ -53,6 +51,8 @@ namespace Hexalyser.ViewModels
         public DocumentViewModel(Document document)
         {
             Document = document;
+
+            document.SequenceChanged += (d) => { RaisePropertyChanged(ElementsPropertyName); };
         }
         #endregion Constructors
     }

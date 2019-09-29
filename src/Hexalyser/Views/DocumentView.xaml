@@ -18,11 +18,12 @@
             <ItemsControl ItemsSource="{Binding Elements}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding RtfText}" FontFamily="Courier New" />
+                        <TextBlock Text="{Binding Text}" FontFamily="Courier New" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+
         <StatusBar Grid.Row="1">
             <StatusBarItem>
                 <TextBlock Text="{Binding Length}" />

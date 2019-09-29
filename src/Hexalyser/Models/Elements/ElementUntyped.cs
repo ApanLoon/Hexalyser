@@ -1,25 +1,14 @@
-﻿
-using System.Text;
-
-namespace Hexalyser.Models
+﻿namespace Hexalyser.Models.Elements
 {
-    /// <summary>
-    /// Base class for all elements. This is also used for the raw hex dump elements.
-    /// </summary>
-    public class Element
+    public class ElementUntyped : Element
     {
-        public byte[] Bytes { get; protected set; }
-
-        public string RtfText => ToRichText();
-
-        public Element(byte[] bytes)
+        public ElementUntyped(byte[] bytes, Document document) : base(bytes, document)
         {
-            Bytes = bytes;
         }
 
-        public virtual string ToRichText()
+        public override string ToText()
         {
-            string s = "";
+            string s = $"<untyped count=\"{Bytes.Length}\">\n";
             int offset = 0;
             string line = "";
             string ascii = "";
@@ -27,7 +16,7 @@ namespace Hexalyser.Models
             {
                 if (i != 0 && i % 16 == 0)
                 {
-                    s += $"{offset:x8}:{line,-50} {ascii}\n";
+                    s += $"    {offset:x8}:{line,-50} {ascii}\n";
                     offset += 16;
                     line = "";
                     ascii = "";
@@ -41,7 +30,7 @@ namespace Hexalyser.Models
 
                 if (Bytes[i] >= 0x20 && Bytes[i] < 0x7f)
                 {
-                    ascii += (char) Bytes[i];
+                    ascii += (char)Bytes[i];
                 }
                 else
                 {
@@ -51,9 +40,11 @@ namespace Hexalyser.Models
 
             if (line.Length != 0)
             {
-                s += $"{offset:x8}:{line,-50}  {ascii}\n";
+                s += $"    {offset:x8}:{line,-50}  {ascii}\n";
             }
+            s += $"</untyped>\n";
             return s;
         }
+
     }
 }
