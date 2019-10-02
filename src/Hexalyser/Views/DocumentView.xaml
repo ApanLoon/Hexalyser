@@ -4,9 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Hexalyser.Views"
+             xmlns:elements="clr-namespace:Hexalyser.ViewModels.Elements"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <UserControl.Resources>
+        <Style x:Key="Background">
+            <Setter Property="Grid.Background" Value="#1e1e1e"/>
+            <Setter Property="TextBlock.FontFamily" Value="Courier New" />
+        </Style>
+        <Style x:Key="XmlOperator">
+            <Setter Property="TextBlock.Foreground" Value="#808080" />
+        </Style>
+        <Style x:Key="ElementName">
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+        <Style x:Key="AttributeName">
+            <Setter Property="TextBlock.Foreground" Value="#69c8f2" />
+            <Setter Property="TextBlock.Margin" Value="10, 0, 0, 0" />
+        </Style>
+        <Style x:Key="AttributeValue">
+            <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+        </Style>
+        <Style x:Key="Values">
+            <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+            <Setter Property="TextBlock.Margin" Value="40, 0, 0, 0" />
+        </Style>
+        <Style x:Key="Addresses">
+            <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+            <Setter Property="TextBlock.Margin" Value="40, 0, 0, 0" />
+        </Style>
+        <Style x:Key="Bytes">
+            <Setter Property="TextBlock.Foreground" Value="White" />
+            <Setter Property="TextBlock.Margin" Value="10, 0, 0, 0" />
+        </Style>
+        <Style x:Key="Ascii">
+            <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+            <Setter Property="TextBlock.Margin" Value="10, 0, 0, 0" />
+        </Style>
+
+        <Style x:Key="Document">
+            <Setter Property="StackPanel.Margin" Value="5 5 5 5" />
+        </Style>
+
+        <Style TargetType="StatusBar">
+            <Setter Property="Background" Value="#686868" />
+            <Setter Property="Foreground" Value="#f1f1f1" />
+        </Style>
+    </UserControl.Resources>
+    <Grid Style="{StaticResource Background}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
@@ -16,11 +61,77 @@
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Elements}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Text}" FontFamily="Courier New" />
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type elements:ElementUntypedViewModel}">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
+                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Addresses}" Style="{StaticResource Addresses}" />
+                                <TextBlock Text="{Binding Bytes}" Style="{StaticResource Bytes}" />
+                                <TextBlock Text="{Binding Ascii}" Style="{StaticResource Ascii}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
+
+                    <DataTemplate DataType="{x:Type elements:ElementUInt16ViewModel}">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
+                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeName}">Count</TextBlock>
+                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type elements:ElementUInt32ViewModel}">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
+                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeName}">Count</TextBlock>
+                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
+                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+
+                </ItemsControl.Resources>
             </ItemsControl>
         </ScrollViewer>
 

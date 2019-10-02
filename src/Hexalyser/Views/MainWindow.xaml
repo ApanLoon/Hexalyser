@@ -10,13 +10,113 @@
         mc:Ignorable="d"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
         Title="{Binding WindowTitle}" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="WindowTitle">
+            <Setter Property="DockPanel.Background" Value="#2d2d30"/>
+            <Setter Property="TextBlock.Foreground" Value="#f1f1f1" />
+            <Setter Property="DockPanel.Margin" Value="2" />
+        </Style>
+        <Style TargetType="Grid">
+            <Setter Property="Grid.Background" Value="#2d2d30"/>
+        </Style>
+        <Style TargetType="ToolBarTray">
+            <Setter Property="Background" Value="#2d2d30"/>
+        </Style>
+        <Style TargetType="ToolBar">
+            <Setter Property="Background" Value="#2d2d30"/>
+        </Style>
+        <Style TargetType="ToolBarOverflowPanel">
+            <Setter Property="Background" Value="#2d2d30"/>
+        </Style>
+
+        <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="Button">
+            <Setter Property="Background" Value="#2d2d30"/>
+            <Setter Property="Foreground" Value="#f1f1f1"/>
+        </Style>
+
+        <Style TargetType="TabControl">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TabPanel Grid.Row="0"
+                                      Panel.ZIndex="1"
+                                      IsItemsHost="True"
+                                      Background="Transparent" />
+                            <Border Grid.Row="1"
+                                    BorderThickness="0 2 0 0"
+                                    BorderBrush="#007acc">
+                                <ContentPresenter VerticalAlignment="Stretch"
+                                                  HorizontalAlignment="Stretch"
+                                                  ContentSource="SelectedContent"
+                                                  Margin="0"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid Name="Panel">
+                            <ContentPresenter x:Name="ContentSite"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              ContentSource="Header"
+                                              Margin="5, 0, 5, 0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="#007acc"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="#2d2d30" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TabTitle">
+            <Setter Property="TextBlock.Foreground" Value="#f1f1f1" />
+        </Style>
+        <Style x:Key="TabClose">
+            <Setter Property="Button.Margin" Value="5, 0, 0, 0" />
+            <Setter Property="Button.Background" Value="Transparent"/>
+            <Setter Property="Button.BorderThickness" Value="0"/>
+            <Setter Property="TextBlock.Foreground" Value="#f1f1f1" />
+        </Style>
+
+        <Style TargetType="StatusBar">
+            <Setter Property="Background" Value="#007acc" />
+            <Setter Property="Foreground" Value="#f1f1f1" />
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ToolBarTray Grid.Row="0">
+        <DockPanel Grid.Row="0">
+            <Image DockPanel.Dock="Left" />
+            <Button x:Name="Close" DockPanel.Dock="Right">x</Button>
+            <Button x:Name="Maximise" DockPanel.Dock="Right">M</Button>
+            <Button x:Name="Minimise" DockPanel.Dock="Right">m</Button>
+            <TextBlock Style="{StaticResource WindowTitle}" Text="{Binding WindowTitle}" />
+        </DockPanel>
+        <ToolBarTray Grid.Row="1">
             <ToolBar>
                 <Button Content="Open">
                     <i:Interaction.Behaviors>
@@ -31,14 +131,14 @@
             </ToolBar>
         </ToolBarTray>
 
-        <TabControl Grid.Row="1"
+        <TabControl Grid.Row="2"
                     ItemsSource="{Binding Documents}"
                     SelectedIndex="{Binding SelectedDocumentIndex}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" />
-                        <Button Margin="5 0 0 0" Command="{Binding CommandClose}" Content="X" />
+                        <TextBlock Style="{StaticResource TabTitle}" Text="{Binding Name}" />
+                        <Button Style="{StaticResource TabClose}" Command="{Binding CommandClose}" Content="X" />
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
@@ -49,7 +149,7 @@
             </TabControl.ContentTemplate>
         </TabControl>
 
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="3">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusMessage}" />
             </StatusBarItem>

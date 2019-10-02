@@ -4,6 +4,7 @@
     {
         public ElementUntyped(byte[] bytes, Document document) : base(bytes, document)
         {
+            TypeName = "Untyped";
         }
 
         public override string ToText()

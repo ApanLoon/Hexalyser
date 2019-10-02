@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Hexalyser.Messages;
 using Hexalyser.Models;
 using Hexalyser.Models.Elements;
+using Hexalyser.ViewModels.Elements;
 
 namespace Hexalyser.ViewModels
 {
@@ -25,7 +27,13 @@ namespace Hexalyser.ViewModels
         }
 
         public string ElementsPropertyName = "Elements";
-        public List<Element> Elements => Document.Elements;
+
+        public ObservableCollection<ElementViewModel> Elements
+        {
+            get => _elements;
+            set => Set(ref _elements, value);
+        }
+        private ObservableCollection<ElementViewModel> _elements;
 
         public string Length => $"{Document.Length} bytes";
 
@@ -51,9 +59,32 @@ namespace Hexalyser.ViewModels
         public DocumentViewModel(Document document)
         {
             Document = document;
+            BuildElements();
 
-            document.SequenceChanged += (d) => { RaisePropertyChanged(ElementsPropertyName); };
+            document.SequenceChanged += (d) => { BuildElements(); };
         }
         #endregion Constructors
+
+        private void BuildElements()
+        {
+            ObservableCollection<ElementViewModel> collection = new ObservableCollection<ElementViewModel>();
+            foreach (Element e in Document.Elements)
+            {
+                switch (e)
+                {
+                    case ElementUntyped elementUntyped:
+                        collection.Add(new ElementUntypedViewModel(e));
+                        break;
+                    case ElementUInt16 elementUInt16:
+                        collection.Add(new ElementUInt16ViewModel(e));
+                        break;
+                    case ElementUInt32 elementUInt32:
+                        collection.Add(new ElementUInt32ViewModel(e));
+                        break;
+                }
+            }
+            Elements = collection;
+        }
+
     }
 }

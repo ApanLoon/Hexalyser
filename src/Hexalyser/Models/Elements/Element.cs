@@ -1,4 +1,5 @@
 ﻿using System;
+using Hexalyser.Models.Expressions;
 
 namespace Hexalyser.Models.Elements
 {
@@ -7,6 +8,10 @@ namespace Hexalyser.Models.Elements
     /// </summary>
     public class Element
     {
+        public string TypeName { get; protected set; }
+        public string Name { get; set; } = "";
+        public Expression Count { get; set; } = new Expression("1");
+
         public Document Document { get; set; }
         public Element PreviousElement { get; set; }
         public Element NextElement { get; set; }
