@@ -4,20 +4,6 @@
     <Style TargetType="Grid">
         <Setter Property="Grid.Background" Value="{StaticResource BackgroundBrush}"/>
     </Style>
-    <Style TargetType="ToolBarTray">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-    </Style>
-    <Style TargetType="ToolBar">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-    </Style>
-    <Style TargetType="ToolBarOverflowPanel">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-    </Style>
-
-    <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-    </Style>
 
 
     <Style TargetType="TabControl">
