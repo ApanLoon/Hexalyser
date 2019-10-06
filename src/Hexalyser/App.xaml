@@ -6,7 +6,15 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <vm:ViewModelLocator x:Key="Locator" xmlns:vm="clr-namespace:Hexalyser.ViewModels" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Skins/Dark/Skin.xaml" />
+                <ResourceDictionary Source="Views/Components/WpfStylableWindow/Styles.xaml" />
+                <ResourceDictionary Source="Views/Styles.xaml" />
+               <ResourceDictionary>
+                    <vm:ViewModelLocator x:Key="Locator"  />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
