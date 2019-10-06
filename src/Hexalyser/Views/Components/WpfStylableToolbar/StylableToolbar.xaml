@@ -4,12 +4,9 @@
     <Style TargetType="ToolBarTray">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
     </Style>
+
     <Style TargetType="ToolBar">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-    </Style>
-    <Style TargetType="ToolBarOverflowPanel">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-        <Setter Property="Margin" Value="100" />
     </Style>
 
     <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="Button">

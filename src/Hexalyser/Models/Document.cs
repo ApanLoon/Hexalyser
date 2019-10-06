@@ -21,7 +21,7 @@ namespace Hexalyser.Models
         public string FileName { get; set; }
         public int Length { get; protected set; }
 
-        protected Element FirstElement;
+        public Element FirstElement { get; protected set; }
 
         public List<Element> Elements
         {
@@ -50,14 +50,6 @@ namespace Hexalyser.Models
                 byte[] buf = File.ReadAllBytes(fileName);
                 Length = buf.Length;
                 FirstElement = new ElementUntyped(buf, this);
-
-                //TODO: Remove test code: (This might be somewhat correct for PDB files)
-                Element e;
-                e = InsertType["uint16"](FirstElement, 4);
-                //InsertType["uint32"](FirstElement, 1); // Should throw an exception
-                e = InsertType["uint16"](FirstElement.NextElement.NextElement, 0);
-                e = InsertType["uint32"](e.NextElement, 0);
-                e = InsertType["uint32"](e.NextElement, 0);
             }
             catch (Exception e)
             {

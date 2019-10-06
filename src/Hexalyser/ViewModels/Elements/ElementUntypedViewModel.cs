@@ -19,7 +19,7 @@ namespace Hexalyser.ViewModels.Elements
                 {
                     s += $"{i:x8}:\n";
                 }
-                return s;
+                return s.Substring(0, s.Length - 1); // Drop the last newline
             }
         }
 
@@ -47,6 +47,10 @@ namespace Hexalyser.ViewModels.Elements
                 }
 
                 s = s.AddCharacter(' ', 49 - lastLineLength);
+                if (s.EndsWith('\n'))
+                {
+                    s = s.Substring(0, s.Length - 1); // Drop the last newline
+                }
                 return s;
             }
         }
@@ -72,6 +76,10 @@ namespace Hexalyser.ViewModels.Elements
                     {
                         s += "\n";
                     }
+                }
+                if (s.EndsWith('\n'))
+                {
+                    s = s.Substring(0, s.Length - 1); // Drop the last newline
                 }
                 return s;
             }
