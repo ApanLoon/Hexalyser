@@ -56,6 +56,14 @@ namespace Hexalyser.Models
                 System.Diagnostics.Debug.WriteLine(e);
             }
         }
+
+        public Document(string fileName, byte[] buf)
+        {
+            FileName = fileName;
+            Name = Path.GetFileName(fileName);
+            Length = buf.Length;
+            FirstElement = new ElementUntyped(buf, this);
+        }
         #endregion Constructors
 
         public static Dictionary<string, Func<Element, int, Element>> InsertType = new Dictionary<string, Func<Element, int, Element>>()
