@@ -29,29 +29,23 @@ namespace Hexalyser.ViewModels.Elements
             get
             {
                 string s = "";
-                int lastLineLength = 0;
                 for (int i = 0; i < Element.Bytes.Length; i++)
                 {
-                    lastLineLength += 3;
+                    if (i > 0 && i % 16 != 0)
+                    {
+                        s += " ";
+                    }
                     if (i > 0 && i % 8 == 0 && i % 16 != 0)
                     {
                         s += " ";
-                        lastLineLength++;
                     }
                     if (i > 0 && i % 16 == 0)
                     {
                         s += "\n";
-                        lastLineLength = 3;
                     }
-                    s += $"{Element.Bytes[i]:x2} ";
+                    s += $"{Element.Bytes[i]:x2}";
                 }
-
-                s = s.AddCharacter(' ', 49 - lastLineLength);
-                if (s.EndsWith('\n'))
-                {
-                    s = s.Substring(0, s.Length - 1); // Drop the last newline
-                }
-                return s;
+                return s.Trim();
             }
         }
 
@@ -77,11 +71,7 @@ namespace Hexalyser.ViewModels.Elements
                         s += "\n";
                     }
                 }
-                if (s.EndsWith('\n'))
-                {
-                    s = s.Substring(0, s.Length - 1); // Drop the last newline
-                }
-                return s;
+                return s.Trim();
             }
         }
     }
