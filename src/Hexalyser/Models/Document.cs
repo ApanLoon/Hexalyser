@@ -8,6 +8,10 @@ namespace Hexalyser.Models
 {
     public class Document
     {
+        #region Fields
+        protected int ElementNameCount = 0;
+        #endregion Fields
+
         #region Events
         public event Action<Document> SequenceChanged;
         protected void RaiseSequenceChanged()
@@ -50,6 +54,7 @@ namespace Hexalyser.Models
                 byte[] buf = File.ReadAllBytes(fileName);
                 Length = buf.Length;
                 FirstElement = new ElementUntyped(buf, this);
+                FirstElement.Name = GetAutoName(this);
             }
             catch (Exception e)
             {
@@ -88,11 +93,12 @@ namespace Hexalyser.Models
             byte[] newBuf = src.Bytes.Skip(offset).Take(length).ToArray();
             byte[] nextBytes = src.Bytes.Skip(offset + length).ToArray();
 
-            Element newElement = (T)Activator.CreateInstance(typeof(T), newBuf, document); 
+            Element newElement = (T)Activator.CreateInstance(typeof(T), newBuf, document);
+            newElement.Name = GetAutoName(document);
 
             if (src.Bytes.Length - offset - length > 0)
             {
-                newElement.Append(new ElementUntyped(nextBytes, document));
+                newElement.Append(new ElementUntyped(nextBytes, document){Name = GetAutoName(document)});
             }
 
             if (offset > 0)
@@ -120,6 +126,11 @@ namespace Hexalyser.Models
             }
             document.RaiseSequenceChanged();
             return newElement;
+        }
+
+        protected static string GetAutoName(Document document)
+        {
+            return $"Element {document.ElementNameCount++}";
         }
 
         public void AppendElement(Element newElement, Element targetElement)
