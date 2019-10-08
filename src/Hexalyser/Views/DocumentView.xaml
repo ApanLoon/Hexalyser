@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Hexalyser.Views"
              xmlns:elements="clr-namespace:Hexalyser.ViewModels.Elements"
+             xmlns:wpfTextBoxBindableSelection="clr-namespace:WpfTextBoxBindableSelection"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -63,10 +63,20 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="0"
+                      Background="Transparent"
                       HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Elements}">
-                <ItemsControl.Resources>
+                      VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="False">
+            <ListView Grid.Row="0" ItemsSource="{Binding Elements}"
+                      Background="{StaticResource BackgroundBrush}"
+                      SelectedItem="{Binding SelectedElement}">
+                <ListView.Template>
+                    <ControlTemplate>
+                        <!-- Empty template to allow ScrollViewer to capture mouse scroll -->
+                        <ItemsPresenter />
+                    </ControlTemplate>
+                </ListView.Template>
+                <ListView.Resources>
                     <DataTemplate DataType="{x:Type elements:ElementUntypedViewModel}">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
@@ -78,9 +88,12 @@
                                 <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Addresses}"               Style="{StaticResource Addresses}" />
-                                <TextBox   Text="{Binding Path=Bytes, Mode=OneWay}" Style="{StaticResource Bytes}" />
-                                <TextBlock Text="{Binding Ascii}"                   Style="{StaticResource Ascii}" />
+                                <TextBlock Style="{StaticResource Addresses}" Text="{Binding Addresses}" />
+                                <wpfTextBoxBindableSelection:TextBox Style="{StaticResource Bytes}"
+                                                                     Text="{Binding Path=Bytes, Mode=OneWay}"
+                                                                     SelectionStartBindable="{Binding SelectionStart, Mode=OneWayToSource}"
+                                                                     SelectionLengthBindable="{Binding SelectionLength, Mode=OneWayToSource}"/>
+                                <TextBlock Style="{StaticResource Ascii}"     Text="{Binding Ascii}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
@@ -136,13 +149,37 @@
                         </StackPanel>
                     </DataTemplate>
 
-                </ItemsControl.Resources>
-            </ItemsControl>
+                </ListView.Resources>
+            </ListView>
         </ScrollViewer>
 
         <StatusBar Grid.Row="1">
             <StatusBarItem>
+                <Label>Length</Label>
+            </StatusBarItem>
+            <StatusBarItem>
                 <TextBlock Text="{Binding Length}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label>Selected element</Label>
+            </StatusBarItem>
+            <StatusBarItem DataContext="{Binding SelectedElement}">
+                <TextBlock Text="{Binding TypeName}" />
+            </StatusBarItem>
+            <StatusBarItem DataContext="{Binding SelectedElement}">
+                <TextBlock Text="{Binding Name}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label>Selection start</Label>
+            </StatusBarItem>
+            <StatusBarItem DataContext="{Binding SelectedElement}">
+                <TextBlock Text="{Binding SelectionStart}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label>Selection length</Label>
+            </StatusBarItem>
+            <StatusBarItem DataContext="{Binding SelectedElement}">
+                <TextBlock Text="{Binding SelectionLength}" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

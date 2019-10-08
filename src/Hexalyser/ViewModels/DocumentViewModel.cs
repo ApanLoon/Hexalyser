@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -36,6 +35,13 @@ namespace Hexalyser.ViewModels
         private ObservableCollection<ElementViewModel> _elements;
 
         public string Length => $"{Document.Length} bytes";
+
+        public ElementViewModel SelectedElement
+        {
+            get => _selectedElement;
+            set => Set(ref _selectedElement, value);
+        }
+        private ElementViewModel _selectedElement;
 
         #endregion Properties
 

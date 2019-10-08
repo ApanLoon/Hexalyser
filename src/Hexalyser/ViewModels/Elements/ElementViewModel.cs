@@ -35,5 +35,21 @@ namespace Hexalyser.ViewModels.Elements
                 RaisePropertyChanged();
             }
         }
+
+        public int SelectionStart
+        {
+            get => _selectionStart;
+            set => Set(ref _selectionStart, value);
+        }
+        private int _selectionStart;
+
+        public int SelectionLength
+        {
+            get => _selectionLength;
+            set => Set(ref _selectionLength, value);
+        }
+        private int _selectionLength;
+
+
     }
 }
