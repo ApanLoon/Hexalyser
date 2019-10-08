@@ -34,8 +34,13 @@
             <Setter Property="TextBlock.Margin" Value="40, 0, 0, 0" />
         </Style>
         <Style x:Key="Bytes">
-            <Setter Property="TextBlock.Foreground" Value="White" />
-            <Setter Property="TextBlock.Margin" Value="10, 0, 0, 0" />
+            <Setter Property="Border.BorderThickness"    Value="0" />
+            <Setter Property="TextBox.Background"        Value="Transparent" />
+            <Setter Property="TextBox.Foreground"        Value="White" />
+            <Setter Property="TextBox.Margin"            Value="10, 0, 0, 0" />
+            <Setter Property="TextBox.IsReadOnly"        Value="True" />
+            <Setter Property="TextBox.AcceptsReturn"     Value="True" />
+            <Setter Property="TextBox.AutoWordSelection" Value="True" />
         </Style>
         <Style x:Key="Ascii">
             <Setter Property="TextBlock.Foreground" Value="#569cd6" />
@@ -73,9 +78,9 @@
                                 <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Addresses}" Style="{StaticResource Addresses}" />
-                                <TextBlock Text="{Binding Bytes}" Style="{StaticResource Bytes}" />
-                                <TextBlock Text="{Binding Ascii}" Style="{StaticResource Ascii}" />
+                                <TextBlock Text="{Binding Addresses}"               Style="{StaticResource Addresses}" />
+                                <TextBox   Text="{Binding Path=Bytes, Mode=OneWay}" Style="{StaticResource Bytes}" />
+                                <TextBlock Text="{Binding Ascii}"                   Style="{StaticResource Ascii}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
