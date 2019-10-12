@@ -11,7 +11,7 @@ namespace Hexalyser.Behaviours
              cd C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\
              Register DLL: gacutil -i System.Windows.Interactivity.dll
      */
-    public class OpenFileBehaviour : Behavior<Button>
+    public class OpenFileBehaviour : Behavior<MenuItem>
     {
         public string MessageIdentifier { get; set; }
         public string Filter { get; set; }

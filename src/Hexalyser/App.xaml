@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Skins/Dark/Skin.xaml" />
                 <ResourceDictionary Source="Views/Components/WpfStylableWindow/StylableWindow.xaml" />
+                <ResourceDictionary Source="Views/Components/WpfStylableMenu/StylableMenu.xaml" />
                 <ResourceDictionary Source="Views/Styles.xaml" />
                <ResourceDictionary>
                     <vm:ViewModelLocator x:Key="Locator"  />

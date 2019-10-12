@@ -16,26 +16,57 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ToolBarTray Grid.Row="0">
-            <ToolBar>
-                <Button Content="Open">
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open raw...">
                     <i:Interaction.Behaviors>
                         <behaviours:OpenFileBehaviour MessageIdentifier="OpenDocuments" Filter="All files (*.*)|*.*" MultiSelect="True" />
                     </i:Interaction.Behaviors>
-                </Button>
-                <Button Content="Save" />
-                <Button Content="Save As" />
+                </MenuItem>
+                <MenuItem Header="_Open hexml..." IsEnabled="False">
+                    <!--
+                    <i:Interaction.Behaviors>
+                        <behaviours:OpenFileBehaviour MessageIdentifier="OpenDocuments" Filter="All files (*.*)|*.*" MultiSelect="True" />
+                    </i:Interaction.Behaviors>
+                    -->
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Save hexml" Command="{Binding SaveCommand}" IsEnabled="False" />
+                <MenuItem Header="Save hexml as..." IsEnabled="False">
+                    <!--
+                    <i:Interaction.Behaviors>
+                        <behaviours:SaveFileBehaviour MessageIdentifier="SaveDocument" Filter="All files (*.*)|*.*" MultiSelect="False" />
+                    </i:Interaction.Behaviors>
+                    -->
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Quit" Command="{StaticResource CloseCommand}" IsEnabled="False" /> <!-- TODO: This does not work, perhaps make the close window method a command in the ViewModel and use that in the window as well. -->
+            </MenuItem>
+            <MenuItem Header="_Edit" IsEnabled="False">
+                <MenuItem Header="Copy" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" IsEnabled="False" /> <!-- TODO: Open a popup window with version info etc. -->
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray Grid.Row="1">
+            <ToolBar>
+                <Button Content="x"/>
+                <Button Content="y" />
+                <Button Content="z" />
             </ToolBar>
             <ToolBar>
                 <Button Content="Test" Command="{Binding CommandTest}" />
             </ToolBar>
         </ToolBarTray>
 
-        <TabControl Grid.Row="1"
+        <TabControl Grid.Row="2"
                     ItemsSource="{Binding Documents}"
                     SelectedIndex="{Binding SelectedDocumentIndex}">
             <TabControl.ItemTemplate>
@@ -55,7 +86,7 @@
             </TabControl.ContentTemplate>
         </TabControl>
 
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="3">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusMessage}" />
             </StatusBarItem>
