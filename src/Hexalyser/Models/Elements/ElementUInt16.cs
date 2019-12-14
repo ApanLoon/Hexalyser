@@ -6,9 +6,10 @@ namespace Hexalyser.Models.Elements
     {
         public UInt16[] Values { get; set; }
 
-        public ElementUInt16(byte[] bytes, Document document) : base(bytes, document)
+        public ElementUInt16(Document document, int offset, int length) : base(document, offset, length)
         {
             TypeName = "UInt16";
+            Count.Text = $"{length / 2}";
             UpdateValues();
         }
 
@@ -18,7 +19,7 @@ namespace Hexalyser.Models.Elements
             Values = new UInt16[count];
             for (int i = 0; i < count; i++)
             {
-                Values[i] = BitConverter.ToUInt16(Bytes, i * 2);
+                Values[i] = BitConverter.ToUInt16(Document.Buffer, Offset + i * 2);
             }
         }
 

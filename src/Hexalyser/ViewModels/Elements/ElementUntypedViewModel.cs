@@ -1,78 +1,81 @@
-﻿using Hexalyser.Extensions;
-using Hexalyser.Models.Elements;
+﻿using Hexalyser.Models.Elements;
 
 namespace Hexalyser.ViewModels.Elements
 {
     public class ElementUntypedViewModel : ElementViewModel
     {
-        public ElementUntypedViewModel(Element element) : base(element)
-        {
-        }
-
         public string AddressesPropertyName = "Addresses";
+        private string _addresses;
         public string Addresses
         {
-            get
-            {
-                string s = "";
-                for (int i = 0; i < Element.Bytes.Length; i += 16)
-                {
-                    s += $"{i:x8}:\n";
-                }
-                return s.Substring(0, s.Length - 1); // Drop the last newline
-            }
+            get => _addresses;
+            set => Set(ref _addresses, value);
         }
 
         public string BytesPropertyName = "Bytes";
+        private string _bytes;
         public string Bytes
         {
-            get
-            {
-                string s = "";
-                for (int i = 0; i < Element.Bytes.Length; i++)
-                {
-                    if (i > 0 && i % 16 != 0)
-                    {
-                        s += " ";
-                    }
-                    if (i > 0 && i % 8 == 0 && i % 16 != 0)
-                    {
-                        s += " ";
-                    }
-                    if (i > 0 && i % 16 == 0)
-                    {
-                        s += "\n";
-                    }
-                    s += $"{Element.Bytes[i]:x2}";
-                }
-                return s.Trim();
-            }
+            get => _bytes;
+            set => Set(ref _bytes, value);
         }
 
         public string AsciiPropertyName = "Ascii";
+        private string _ascii;
         public string Ascii
         {
-            get
-            {
-                string s = "";
-                for (int i = 0; i < Element.Bytes.Length; i++)
-                {
-                    if (Element.Bytes[i] >= 0x20 && Element.Bytes[i] < 0x7f)
-                    {
-                        s += (char)Element.Bytes[i];
-                    }
-                    else
-                    {
-                        s += ".";
-                    }
+            get => _ascii;
+            set => Set(ref _ascii, value);
+        }
 
-                    if (i > 0 && i % 16 == 0)
+        public ElementUntypedViewModel(Element element) : base(element)
+        {
+            UpdateProperties();
+        }
+
+        protected byte[] Buffer => Element.Document.Buffer;
+
+        protected void UpdateProperties()
+        {
+            int offset = 0;
+            string addresses = "";
+            string bytes = "";
+            string ascii = "";
+            int index = Element.Offset;
+            for (int i = 0; i < Element.Length; i++)
+            {
+                if (i != 0 && i % 16 == 0)
+                {
+                    addresses += $"{offset:x8}\n";
+                    offset += 16;
+                    bytes += "\n";
+                    ascii += "\n";
+                }
+
+                if (i % 16 != 0)
+                {
+                    bytes += " ";
+                    if (i % 8 == 0)
                     {
-                        s += "\n";
+                        bytes += " ";
                     }
                 }
-                return s.Trim();
+                bytes += $"{Buffer[index]:x2}";
+
+                if (Buffer[index] >= 0x20 && Buffer[index] < 0x7f)
+                {
+                    ascii += (char)Buffer[index];
+                }
+                else
+                {
+                    ascii += ".";
+                }
+                index++;
             }
+
+            Addresses = addresses;
+            Bytes = bytes;
+            Ascii = ascii;
         }
     }
 }

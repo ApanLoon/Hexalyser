@@ -24,6 +24,7 @@ namespace Hexalyser.Models
         public string Name { get; set; }
         public string FileName { get; set; }
         public int Length { get; protected set; }
+        public byte[] Buffer { get; protected set; }
 
         public Element FirstElement { get; protected set; }
 
@@ -51,9 +52,9 @@ namespace Hexalyser.Models
                 FileName = fileName;
                 Name = Path.GetFileName(fileName);
 
-                byte[] buf = File.ReadAllBytes(fileName);
-                Length = buf.Length;
-                FirstElement = new ElementUntyped(buf, this);
+                Buffer = File.ReadAllBytes(fileName);
+                Length = Buffer.Length;
+                FirstElement = new ElementUntyped(this, 0, Length);
                 FirstElement.Name = GetAutoName(this);
             }
             catch (Exception e)
@@ -67,7 +68,7 @@ namespace Hexalyser.Models
             FileName = fileName;
             Name = Path.GetFileName(fileName);
             Length = buf.Length;
-            FirstElement = new ElementUntyped(buf, this);
+            FirstElement = new ElementUntyped(this, 0, Length);
         }
         #endregion Constructors
 
@@ -77,34 +78,50 @@ namespace Hexalyser.Models
             {"uint32", (src, offset) => Insert<ElementUInt32>(src, offset, 4)}
         };
 
+        /// <summary>
+        /// Inserts a new element into an ElementUntyped.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="src">The element to insert the new element into.</param>
+        /// <param name="offset">In bytes, relative to the start of the src element.</param>
+        /// <param name="length">In bytes of the new element.</param>
+        /// <returns></returns>
         protected static Element Insert<T>(Element src, int offset, int length) where T : Element
         {
-            if (!(src is ElementUntyped)) // Don't call this on anything other than untyped elements
+            // Don't call this on anything other than untyped elements:
+            if (!(src is ElementUntyped))
             {
                 return null;
             }
 
             Document document = src.Document;
-            if (src.Bytes.Length < offset + length)
+
+            // Do we have enough bytes within the src element?
+            if (src.Length < offset + length)
             {
-                throw new ArgumentOutOfRangeException(nameof(offset), src.Bytes.Length - offset,
+                throw new ArgumentOutOfRangeException(nameof(offset), src.Length - offset,
                     $"There are not enough bytes in the buffer to insert type {typeof(T).Name}, {length} bytes are required.");
             }
-            byte[] newBuf = src.Bytes.Skip(offset).Take(length).ToArray();
-            byte[] nextBytes = src.Bytes.Skip(offset + length).ToArray();
 
-            Element newElement = (T)Activator.CreateInstance(typeof(T), newBuf, document);
+            int srcLength = offset;
+            int newOffset = offset + src.Offset;
+            int newLength = length;
+            int nextOffset = offset + length + src.Offset;
+            int nextLength = src.Length - length - srcLength;
+
+            Element newElement = (T)Activator.CreateInstance(typeof(T), document, newOffset, newLength);
             newElement.Name = GetAutoName(document);
 
-            if (src.Bytes.Length - offset - length > 0)
+            // Are there bytes after the new element?
+            if (nextLength > 0)
             {
-                newElement.Append(new ElementUntyped(nextBytes, document){Name = GetAutoName(document)});
+                newElement.Append(new ElementUntyped(document, nextOffset, nextLength) { Name = GetAutoName(document) });
             }
 
+            // Are there bytes before the new element?
             if (offset > 0)
             {
-                byte[] previousBytes = src.Bytes.Take(offset).ToArray();
-                src.Bytes = previousBytes;
+                src.Length = srcLength;
                 src.Append(newElement);
             }
             else

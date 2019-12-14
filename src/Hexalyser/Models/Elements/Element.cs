@@ -15,14 +15,16 @@ namespace Hexalyser.Models.Elements
         public Document Document { get; set; }
         public Element PreviousElement { get; set; }
         public Element NextElement { get; set; }
-        public byte[] Bytes { get; set; }
+        public int Offset { get; set; }
+        public int Length { get; set; }
 
         public string Text => ToText();
 
-        public Element(byte[] bytes, Document document)
+        public Element(Document document, int offset, int length)
         {
-            Bytes = bytes;
             Document = document;
+            Offset = offset;
+            Length = length;
         }
 
         /// <summary>
