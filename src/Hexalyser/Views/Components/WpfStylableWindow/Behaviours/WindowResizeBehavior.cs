@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace WpfStyleableWindow.StyleableWindow
+namespace WpfStylableWindow.StylableWindow
 {
     public static class WindowResizeBehavior
     {

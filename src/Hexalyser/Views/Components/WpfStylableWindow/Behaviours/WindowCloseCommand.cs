@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace WpfStyleableWindow.StyleableWindow
+// ReSharper disable CheckNamespace
+namespace WpfStylableWindow.StylableWindow
+// ReSharper restore CheckNamespace
 {
     public class WindowCloseCommand :ICommand
     {     
@@ -20,9 +18,7 @@ namespace WpfStyleableWindow.StyleableWindow
 
         public void Execute(object parameter)
         {
-            var window = parameter as Window;
-
-            if (window != null)
+            if (parameter is Window window)
             {
                 window.Close();
             }

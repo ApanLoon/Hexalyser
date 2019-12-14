@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:sw="clr-namespace:WpfStyleableWindow.StyleableWindow"
+                     xmlns:sw="clr-namespace:WpfStylableWindow.StylableWindow"
                      xmlns:behaviours="clr-namespace:WpfStylableWindow.Behaviours">
 
     <!-- This code is based on this article: https://code.msdn.microsoft.com/windowsdesktop/WPF-styling-a-Window-in-fcf4e4ce/ -->

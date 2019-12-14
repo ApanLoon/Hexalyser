@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace WpfStyleableWindow.StyleableWindow
+namespace WpfStylableWindow.StylableWindow
 {
     public class WindowMaximizeCommand : ICommand
     {

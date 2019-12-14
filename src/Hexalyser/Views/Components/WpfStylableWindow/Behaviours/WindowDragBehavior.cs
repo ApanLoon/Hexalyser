@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfStyleableWindow.StyleableWindow
+namespace WpfStylableWindow.StylableWindow
 {
     public static class WindowDragBehavior
     {

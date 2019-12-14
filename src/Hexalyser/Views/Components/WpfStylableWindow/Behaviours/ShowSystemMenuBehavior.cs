@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Input;
 
-namespace WpfStyleableWindow.StyleableWindow
+namespace WpfStylableWindow.StylableWindow
 {
     public static class ShowSystemMenuBehavior
     {        

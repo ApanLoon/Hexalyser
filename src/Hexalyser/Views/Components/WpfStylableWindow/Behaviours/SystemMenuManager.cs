@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace WpfStyleableWindow.StyleableWindow
+namespace WpfStylableWindow.StylableWindow
 {
     public static class SystemMenuManager
     {        
