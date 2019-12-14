@@ -73,12 +73,15 @@ namespace Hexalyser.ViewModels.Elements
             int index = Element.Offset;
             for (int i = 0; i < Element.Length; i++)
             {
-                if (i != 0 && i % 16 == 0)
+                if (i % 16 == 0)
                 {
                     addresses += $"{offset:x8}\n";
                     offset += 16;
-                    bytes += "\n";
-                    ascii += "\n";
+                    if (i != 0)
+                    {
+                        bytes += "\n";
+                        ascii += "\n";
+                    }
                 }
 
                 if (i % 16 != 0)
