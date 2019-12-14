@@ -59,6 +59,23 @@ namespace Hexalyser.Models.Elements
             element.NextElement = this;
         }
 
+        /// <summary>
+        /// Removes the element from the list. Note: If you remove the first element you might loose track of the entire list!
+        /// </summary>
+        public void Remove()
+        {
+            if (PreviousElement != null)
+            {
+                PreviousElement.NextElement = NextElement;
+            }
+            if (NextElement != null)
+            {
+                NextElement.PreviousElement = PreviousElement;
+            }
+            PreviousElement = null;
+            NextElement = null;
+        }
+
         public virtual string ToText()
         {
             throw new Exception("Don't call top level ToText() in Element.");

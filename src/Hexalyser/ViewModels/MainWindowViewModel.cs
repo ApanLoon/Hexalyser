@@ -1,5 +1,4 @@
-﻿
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Hexalyser.Models;
 using Hexalyser.Messages;
@@ -7,8 +6,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 using Hexalyser.Models.Elements;
 using Hexalyser.ViewModels.Commands;
@@ -67,38 +64,15 @@ namespace Hexalyser.ViewModels
         #region Command_Test
         public RelayCommand CommandTest
         {
-            get { return _commandTest ?? (_commandTest = new RelayCommand(() =>
+            get 
             {
-                Document d = Documents[SelectedDocumentIndex].Document;
-                Element e;
-                switch (_testStep)
+                return _commandTest ?? (_commandTest = new RelayCommand(() =>
                 {
-                    case 4:
-                        Document.InsertType["uint16"](d.FirstElement, 4);
-                        //Document.InsertType["uint32"](d.FirstElement, 1); // Should throw an exception
-                        break;
-                    case 3:
-                        _elementTest = Document.InsertType["uint16"](d.FirstElement.NextElement.NextElement, 0);
-                        break;
-                    case 2:
-                        _elementTest = Document.InsertType["uint32"](_elementTest.NextElement, 0);
-                        break;
-                    case 1:
-                        _elementTest = Document.InsertType["uint32"](_elementTest.NextElement, 0);
-                        break;
-                }
-
-                if (_testStep > 0)
-                {
-                    _testStep--;
-                }
-
-                StatusMessage = $"{DateTime.Now.ToString()}: {Documents[SelectedDocumentIndex].Name} Remaining tests: {_testStep}";
-            })); }
+                    StatusMessage = $"{DateTime.Now.ToString()}: Test";
+                }));
+            }
         }
         private RelayCommand _commandTest;
-        private Element _elementTest;
-        private int _testStep = 4;
         #endregion Command_Test
 
         #region Command_UInt16
@@ -115,8 +89,9 @@ namespace Hexalyser.ViewModels
                     DocumentViewModel dVm = Documents[SelectedDocumentIndex];
                     Document d = dVm.Document;
                     ElementViewModel eVm = dVm.SelectedElement;
-                    //Document.InsertType["uint16"](d.FirstElement, 4);
-                    StatusMessage = $"{DateTime.Now.ToString()}: Change to UInt16 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
+                    Element e = eVm.Element;
+                    Document.InsertType["uint16"](e, eVm.SelectionStart); //TODO: Take multiples into account
+                    StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt16 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
                 }, () => (true || BasicTypeCanExecute()));
             }
         }
@@ -138,8 +113,9 @@ namespace Hexalyser.ViewModels
                     DocumentViewModel dVm = Documents[SelectedDocumentIndex];
                     Document d = dVm.Document;
                     ElementViewModel eVm = dVm.SelectedElement;
-                    //Document.InsertType["uint32"](d.FirstElement, 4);
-                    StatusMessage = $"{DateTime.Now.ToString()}: Change to UInt32 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
+                    Element e = eVm.Element;
+                    Document.InsertType["uint32"](e, eVm.SelectionStart); //TODO: Take multiples into account
+                    StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt32 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
                 }, () => (true || BasicTypeCanExecute()));
             }
         }

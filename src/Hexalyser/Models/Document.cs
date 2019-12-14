@@ -103,44 +103,48 @@ namespace Hexalyser.Models
                     $"There are not enough bytes in the buffer to insert type {typeof(T).Name}, {length} bytes are required.");
             }
 
-            int srcLength = offset;
-            int newOffset = offset + src.Offset;
-            int newLength = length;
-            int nextOffset = offset + length + src.Offset;
-            int nextLength = src.Length - length - srcLength;
+            int bytesBefore = offset;
+            int bytesMiddle = length;
+            int bytesAfter  = src.Length - offset - length;
 
-            Element newElement = (T)Activator.CreateInstance(typeof(T), document, newOffset, newLength);
+            int offsetMiddle = offset;
+            int offsetAfter  = offset + length;
+
+            Element newElement = (T)Activator.CreateInstance(typeof(T), document, src.Offset + offsetMiddle, bytesMiddle);
             newElement.Name = GetAutoName(document);
 
-            // Are there bytes after the new element?
-            if (nextLength > 0)
+            if (offsetMiddle > 0 && bytesAfter > 0)
             {
-                newElement.Append(new ElementUntyped(document, nextOffset, nextLength) { Name = GetAutoName(document) });
-            }
-
-            // Are there bytes before the new element?
-            if (offset > 0)
-            {
-                src.Length = srcLength;
+                newElement.Append(new ElementUntyped(document, src.Offset + offsetAfter, bytesAfter) { Name = GetAutoName(document) });
+                src.Length = bytesBefore;
                 src.Append(newElement);
             }
-            else
+            else if (offsetMiddle == 0 && bytesAfter > 0)
             {
-                // We have no bytes in front of us, we need to remove src and link in the new element to the previous one
-                if (src.PreviousElement != null)
+                if (src.PreviousElement == null)
                 {
-                    src.PreviousElement.Append(newElement);
-                }
-                else
-                {
-                    // This was the first element
-                    if (src.NextElement != null)
-                    {
-                        src.Prepend(newElement);
-                    }
                     document.FirstElement = newElement;
                 }
+                src.Offset = src.Offset + offsetAfter;
+                src.Length = bytesAfter;
+                src.Prepend(newElement);
             }
+            else if (offsetMiddle > 0 && bytesAfter == 0)
+            {
+                src.Length = bytesBefore;
+                src.Append(newElement);
+            }
+            else if (offsetMiddle == 0 && bytesAfter == 0)
+            {
+                if (src.PreviousElement == null)
+                {
+                    document.FirstElement = newElement;
+                }
+                newElement.Name = src.Name;
+                src.Append(newElement);
+                src.Remove();
+            }
+
             document.RaiseSequenceChanged();
             return newElement;
         }
