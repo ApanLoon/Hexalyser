@@ -105,9 +105,9 @@ namespace Hexalyser.ViewModels.Elements
                 index++;
             }
 
-            Addresses = addresses;
-            Bytes = bytes;
-            Ascii = ascii;
+            Addresses = addresses.Trim();
+            Bytes     = bytes.Trim();
+            Ascii     = ascii.Trim();
         }
     }
 }
