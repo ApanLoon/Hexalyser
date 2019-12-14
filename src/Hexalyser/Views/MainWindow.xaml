@@ -57,9 +57,30 @@
 
         <ToolBarTray Grid.Row="1">
             <ToolBar>
-                <Button Content="x"/>
-                <Button Content="y" />
-                <Button Content="z" />
+                <ToolBar.Resources>
+                    <CollectionViewSource x:Key="BasicTypes" Source="{Binding BasicTypeCommands}" />
+                </ToolBar.Resources>
+                <ToolBar.ItemsSource>
+                    <CompositeCollection>
+                        <Border BorderBrush="White" BorderThickness="1">
+                            <Label Content="Basic" Style="{StaticResource ToolBarLabel}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label.LayoutTransform>
+                                    <RotateTransform Angle="-90"></RotateTransform>
+                                </Label.LayoutTransform>
+                            </Label>
+                        </Border>
+                        <CollectionContainer Collection="{Binding Source={StaticResource BasicTypes}}" />
+                    </CompositeCollection>
+                </ToolBar.ItemsSource>
+                <ToolBar.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding Path=Execute}" CommandParameter="{Binding Path=Self}">
+                            <Grid>
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ToolBar.ItemTemplate>
             </ToolBar>
             <ToolBar>
                 <Button Content="Test" Command="{Binding CommandTest}" />
