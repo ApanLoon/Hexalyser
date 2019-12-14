@@ -28,6 +28,35 @@ namespace Hexalyser.ViewModels.Elements
             set => Set(ref _ascii, value);
         }
 
+        public int SelectionStartRaw
+        {
+            get => _selectionStartRaw;
+            set
+            {
+                Set(ref _selectionStartRaw, value);
+                int row = _selectionStartRaw / 49;
+                int col = (int)(0.5f + (_selectionStartRaw % 49) / 3f);
+                int index = row * 16 + col;
+                SelectionStart = index;
+            } 
+        }
+        private int _selectionStartRaw;
+
+        public int SelectionLengthRaw
+        {
+            get => _selectionLengthRaw;
+            set
+            {
+                Set(ref _selectionLengthRaw, value);
+                int row = _selectionLengthRaw / 49;
+                int col = (int)(0.5f + (_selectionLengthRaw % 49) / 3f);
+                int index = row * 16 + col;
+                SelectionLength = index;
+            }
+        }
+        private int _selectionLengthRaw;
+
+
         public ElementUntypedViewModel(Element element) : base(element)
         {
             UpdateProperties();

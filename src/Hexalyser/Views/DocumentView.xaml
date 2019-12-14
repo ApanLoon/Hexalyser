@@ -91,8 +91,8 @@
                                 <TextBlock Style="{StaticResource Addresses}" Text="{Binding Addresses}" />
                                 <wpfTextBoxBindableSelection:TextBox Style="{StaticResource Bytes}"
                                                                      Text="{Binding Path=Bytes, Mode=OneWay}"
-                                                                     SelectionStartBindable="{Binding SelectionStart, Mode=OneWayToSource}"
-                                                                     SelectionLengthBindable="{Binding SelectionLength, Mode=OneWayToSource}"/>
+                                                                     SelectionStartBindable="{Binding SelectionStartRaw, Mode=OneWayToSource}"
+                                                                     SelectionLengthBindable="{Binding SelectionLengthRaw, Mode=OneWayToSource}"/>
                                 <TextBlock Style="{StaticResource Ascii}"     Text="{Binding Ascii}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
