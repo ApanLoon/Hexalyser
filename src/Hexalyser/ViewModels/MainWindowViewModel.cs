@@ -79,22 +79,9 @@ namespace Hexalyser.ViewModels
         {
             get
             {
-                return _commandUInt16 ??= new RelayCommand(() =>
-                {
-                    if (!BasicTypeCanExecute())
-                    {
-                        return;
-                    }
-                    DocumentViewModel dVm = Documents[SelectedDocumentIndex];
-                    Document d = dVm.Document;
-                    ElementViewModel eVm = dVm.SelectedElement;
-                    Element e = eVm.Element;
-                    Document.InsertType["uint16"](e, eVm.SelectionStart); //TODO: Take multiples into account
-                    StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt16 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
-                }, BasicTypeCanExecute);
+                return _commandUInt16 ??= new RelayCommand(() => { InsertType("uint16"); }, BasicTypeCanExecute);
             }
         }
-
         private RelayCommand _commandUInt16;
         #endregion Command_UInt16
         #region Command_UInt32
@@ -102,25 +89,28 @@ namespace Hexalyser.ViewModels
         {
             get
             {
-                return _commandUInt32 ??= new RelayCommand(() =>
-                {
-                    if (!BasicTypeCanExecute())
-                    {
-                        return;
-                    }
-                    DocumentViewModel dVm = Documents[SelectedDocumentIndex];
-                    Document d = dVm.Document;
-                    ElementViewModel eVm = dVm.SelectedElement;
-                    Element e = eVm.Element;
-                    Document.InsertType["uint32"](e, eVm.SelectionStart); //TODO: Take multiples into account
-                    StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt32 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
-                }, BasicTypeCanExecute);
+                return _commandUInt32 ??= new RelayCommand(() => { InsertType("uint32"); }, BasicTypeCanExecute);
             }
         }
         private RelayCommand _commandUInt32;
         #endregion Command_UInt32
 
         #region CommandTools
+        private void InsertType(string typeName)
+        {
+            if (!BasicTypeCanExecute())
+            {
+                return;
+            }
+
+            DocumentViewModel dVm = Documents[SelectedDocumentIndex];
+            Document d = dVm.Document;
+            ElementViewModel eVm = dVm.SelectedElement;
+            Element e = eVm.Element;
+            Document.InsertType[typeName](e, eVm.SelectionStart); //TODO: Take multiples into account
+            StatusMessage = $"{DateTime.Now.ToString()}: Changed to {typeName} at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
+        }
+        
         private bool BasicTypeCanExecute()
         {
             if (SelectedDocumentIndex == -1)
