@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Hexalyser.Models.Elements;
 
 namespace Hexalyser.Models
@@ -173,6 +172,64 @@ namespace Hexalyser.Models
         {
             targetElement.Prepend(newElement);
             RaiseSequenceChanged();
+        }
+
+        public int Merge(IEnumerable<Element> selected)
+        {
+            int count = 0;
+            Element prev = null;
+            foreach (Element cur in selected)
+            {
+                if (prev != null && cur.PreviousElement == prev && cur.GetType() == prev.GetType())
+                {
+                    //Merge cur into prev
+                    prev.Initialise(prev.Offset, prev.Length + cur.Length);
+                    cur.Remove();
+                    count++;
+                }
+                else
+                {
+                    prev = cur;
+                }
+            }
+
+            if (count != 0)
+            {
+                RaiseSequenceChanged();
+            }
+            return count;
+        }
+
+        public int Convert<T>(IEnumerable<Element> selected) where T : Element
+        {
+            int count = 0;
+            foreach (Element element in selected)
+            {
+                if (element.GetType() == typeof(T))
+                {
+                    continue;
+                }
+                Element newElement = (T)Activator.CreateInstance(typeof(T), this);
+
+                //TODO: Check if the type of newElement can be converted without leaving any bytes
+
+                newElement.Name = element.Name + "*";
+                newElement.Initialise(element.Offset, element.Length);
+
+                if (element == FirstElement)
+                {
+                    FirstElement = newElement;
+                }
+                element.Append(newElement);
+                element.Remove();
+                count++;
+            }
+
+            if (count != 0)
+            {
+                RaiseSequenceChanged();
+            }
+            return count;
         }
     }
 }

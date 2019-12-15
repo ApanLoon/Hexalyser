@@ -82,6 +82,34 @@
                     </DataTemplate>
                 </ToolBar.ItemTemplate>
             </ToolBar>
+
+            <ToolBar>
+                <ToolBar.Resources>
+                    <CollectionViewSource x:Key="EditCommands" Source="{Binding EditCommands}" />
+                </ToolBar.Resources>
+                <ToolBar.ItemsSource>
+                    <CompositeCollection>
+                        <Border BorderBrush="White" BorderThickness="1">
+                            <Label Content="Edit" Style="{StaticResource ToolBarLabel}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label.LayoutTransform>
+                                    <RotateTransform Angle="-90"></RotateTransform>
+                                </Label.LayoutTransform>
+                            </Label>
+                        </Border>
+                        <CollectionContainer Collection="{Binding Source={StaticResource EditCommands}}" />
+                    </CompositeCollection>
+                </ToolBar.ItemsSource>
+                <ToolBar.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding Path=Execute}" CommandParameter="{Binding Path=Self}">
+                            <Grid>
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ToolBar.ItemTemplate>
+            </ToolBar>
+
             <ToolBar>
                 <Button Content="Test" Command="{Binding CommandTest}" />
             </ToolBar>

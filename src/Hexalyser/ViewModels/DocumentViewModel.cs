@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -26,22 +27,42 @@ namespace Hexalyser.ViewModels
         }
 
         public string ElementsPropertyName = "Elements";
-
+        private ObservableCollection<ElementViewModel> _elements;
         public ObservableCollection<ElementViewModel> Elements
         {
             get => _elements;
             set => Set(ref _elements, value);
         }
-        private ObservableCollection<ElementViewModel> _elements;
 
         public string Length => $"{Document.Length} bytes";
 
+        private ElementViewModel _selectedElement;
         public ElementViewModel SelectedElement
         {
             get => _selectedElement;
             set => Set(ref _selectedElement, value);
         }
-        private ElementViewModel _selectedElement;
+
+        public string SelectedElementsPropertyName = "SelectedElements";
+        private ObservableCollection<ElementViewModel> _selectedElements = new ObservableCollection<ElementViewModel>();
+        public ObservableCollection<ElementViewModel> SelectedElements
+        {
+            get => _selectedElements;
+            set => Set(ref _selectedElements, value);
+        }
+
+        public IList SelectedItems
+        {
+            get => SelectedElements;
+            set
+            {
+                SelectedElements.Clear();
+                foreach (ElementViewModel eVm in value)
+                {
+                    SelectedElements.Add(eVm);
+                }
+            }
+        }
 
         #endregion Properties
 

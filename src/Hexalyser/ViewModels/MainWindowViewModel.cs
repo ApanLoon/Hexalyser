@@ -56,6 +56,14 @@ namespace Hexalyser.ViewModels
             get => _basicTypeCommands;
             set => Set(ref _basicTypeCommands, value);
         }
+
+        public const string EditCommandsPropertyName = "EditCommands";
+        private ObservableCollection<Command> _editCommands = new ObservableCollection<Command>();
+        public ObservableCollection<Command> EditCommands
+        {
+            get => _editCommands;
+            set => Set(ref _editCommands, value);
+        }
         #endregion ToolbarCommandProperties
 
         #endregion Properties
@@ -104,6 +112,64 @@ namespace Hexalyser.ViewModels
         }
         private RelayCommand _commandUInt32;
         #endregion Command_UInt32
+
+        #region Command_Untyped
+        public RelayCommand CommandUntyped
+        {
+            get
+            {
+                return _commandUntyped ??= new RelayCommand(() =>
+                {
+                    DocumentViewModel dVm = Documents[SelectedDocumentIndex];
+
+                    if (dVm.SelectedElements.Count == 0)
+                    {
+                        return;
+                    }
+
+                    int convertCount = dVm.Document.Convert<ElementUntyped>(dVm.SelectedElements.OrderBy(eVm => eVm.Element.Offset).Select(eVm => eVm.Element));
+
+                    if (convertCount > 0)
+                    {
+                        StatusMessage = $"{DateTime.Now.ToString()}: Converted {convertCount} elements.";
+                    }
+                    else
+                    {
+                        StatusMessage = $"{DateTime.Now.ToString()}: No elements could be converted.";
+                    }
+                });
+            }
+        }
+        private RelayCommand _commandUntyped;
+        #endregion Command_Untyped
+        #region Command_Merge
+        public RelayCommand CommandMerge
+        {
+            get
+            {
+                return _commandMerge ??= new RelayCommand(() =>
+                {
+                    DocumentViewModel dVm = Documents[SelectedDocumentIndex];
+
+                    if (dVm.SelectedElements.Count < 2)
+                    {
+                        return;
+                    }
+
+                    int mergeCount = dVm.Document.Merge(dVm.SelectedElements.OrderBy(eVm => eVm.Element.Offset).Select(eVm => eVm.Element));
+                    if (mergeCount > 0)
+                    {
+                        StatusMessage = $"{DateTime.Now.ToString()}: Merged {mergeCount} elements.";
+                    }
+                    else
+                    {
+                        StatusMessage = $"{DateTime.Now.ToString()}: No elements could be merged.";
+                    }
+                });
+            }
+        }
+        private RelayCommand _commandMerge;
+        #endregion Command_Untyped
 
         #region CommandTools
         private void InsertType(string typeName)
@@ -214,6 +280,11 @@ namespace Hexalyser.ViewModels
                 BasicTypeCommands.Add(new Command() { Name = "UInt16", Execute = CommandUInt16 });
                 BasicTypeCommands.Add(new Command() { Name = "UInt32", Execute = CommandUInt32 });
                 #endregion BasicTypeCommands
+
+                #region EditCommands
+                EditCommands.Add(new Command() { Name = "Untyped", Execute = CommandUntyped });
+                EditCommands.Add(new Command() { Name = "Merge",   Execute = CommandMerge });
+                #endregion EditCommands
 
 
                 Documents = new ObservableCollection<DocumentViewModel>(Model.Documents.Select(document => new DocumentViewModel(document)));
