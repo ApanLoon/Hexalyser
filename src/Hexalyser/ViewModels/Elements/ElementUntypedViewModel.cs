@@ -1,4 +1,6 @@
-﻿using Hexalyser.Models.Elements;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Hexalyser.Messages;
+using Hexalyser.Models.Elements;
 
 namespace Hexalyser.ViewModels.Elements
 {
@@ -52,12 +54,19 @@ namespace Hexalyser.ViewModels.Elements
                 int col = (int)(0.5f + (_selectionLengthRaw % 49) / 3f);
                 int index = row * 16 + col;
                 SelectionLength = index;
+                Messenger.Default.Send(new SelectionChangedMessage(new SelectionMessageParameters()
+                {
+                    DocumentVm = DocumentVm,
+                    ElementVm = this,
+                    SelectionStart = SelectionStart,
+                    SelectionLength = SelectionLength
+                }));
             }
         }
         private int _selectionLengthRaw;
 
 
-        public ElementUntypedViewModel(Element element) : base(element)
+        public ElementUntypedViewModel(DocumentViewModel documentVm, Element element) : base(documentVm, element)
         {
             UpdateProperties();
         }

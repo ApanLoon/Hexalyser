@@ -74,7 +74,6 @@ namespace Hexalyser.ViewModels
         }
         private RelayCommand _commandTest;
         #endregion Command_Test
-
         #region Command_UInt16
         public RelayCommand CommandUInt16
         {
@@ -92,13 +91,12 @@ namespace Hexalyser.ViewModels
                     Element e = eVm.Element;
                     Document.InsertType["uint16"](e, eVm.SelectionStart); //TODO: Take multiples into account
                     StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt16 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
-                }, () => (true || BasicTypeCanExecute()));
+                }, BasicTypeCanExecute);
             }
         }
 
         private RelayCommand _commandUInt16;
         #endregion Command_UInt16
-
         #region Command_UInt32
         public RelayCommand CommandUInt32
         {
@@ -116,15 +114,15 @@ namespace Hexalyser.ViewModels
                     Element e = eVm.Element;
                     Document.InsertType["uint32"](e, eVm.SelectionStart); //TODO: Take multiples into account
                     StatusMessage = $"{DateTime.Now.ToString()}: Changed to UInt32 at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
-                }, () => (true || BasicTypeCanExecute()));
+                }, BasicTypeCanExecute);
             }
         }
         private RelayCommand _commandUInt32;
         #endregion Command_UInt32
 
+        #region CommandTools
         private bool BasicTypeCanExecute()
         {
-            // TODO: What is the best way to make this re-check when selection changes?
             if (SelectedDocumentIndex == -1)
             {
                 return false;
@@ -145,7 +143,7 @@ namespace Hexalyser.ViewModels
 
             return true;
         }
-
+        #endregion CommandTools
         #endregion Commands
 
         #region MessageHandlers
@@ -177,6 +175,15 @@ namespace Hexalyser.ViewModels
             }
         }
         #endregion CloseDocument
+        #region SelectionChanged
+        protected void SelectionChanged(SelectionChangedMessage m)
+        {
+            foreach (Command command in BasicTypeCommands)
+            {
+                command.Execute.RaiseCanExecuteChanged();
+            }
+        }
+        #endregion SelectionChanged
         #endregion MessageHandlers
 
         #region ProtectedProperties
@@ -205,6 +212,7 @@ namespace Hexalyser.ViewModels
 
                 Messenger.Default.Register<FilesOpenedMessage>(this, OpenDocuments);
                 Messenger.Default.Register<CloseDocumentMessage>(this, CloseDocument);
+                Messenger.Default.Register<SelectionChangedMessage>(this, SelectionChanged);
             });
         }
         #endregion Constructors

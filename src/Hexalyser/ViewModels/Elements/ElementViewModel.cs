@@ -5,11 +5,13 @@ namespace Hexalyser.ViewModels.Elements
 {
     public class ElementViewModel : ViewModelBase
     {
-        protected ElementViewModel(Element element)
+        protected ElementViewModel(DocumentViewModel documentVm, Element element)
         {
+            DocumentVm = documentVm;
             Element = element;
         }
 
+        public DocumentViewModel DocumentVm { get; protected set; }
         public Element Element { get; protected set; }
 
         public string TypeName => Element.TypeName;

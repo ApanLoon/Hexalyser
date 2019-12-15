@@ -5,7 +5,7 @@ namespace Hexalyser.ViewModels.Elements
     public class ElementUInt32ViewModel : ElementViewModel
     {
         private ElementUInt32 ElementUInt32 { get; set; }
-        public ElementUInt32ViewModel(Element element) : base(element)
+        public ElementUInt32ViewModel(DocumentViewModel documentVm, Element element) : base(documentVm, element)
         {
             ElementUInt32 = (ElementUInt32)element;
         }

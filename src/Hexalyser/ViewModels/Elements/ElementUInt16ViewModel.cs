@@ -5,7 +5,7 @@ namespace Hexalyser.ViewModels.Elements
     public class ElementUInt16ViewModel : ElementViewModel
     {
         private ElementUInt16 ElementUInt16 { get; set; }
-        public ElementUInt16ViewModel(Element element) : base(element)
+        public ElementUInt16ViewModel(DocumentViewModel documentVm, Element element) : base(documentVm, element)
         {
             ElementUInt16 = (ElementUInt16)element;
         }

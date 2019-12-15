@@ -57,7 +57,19 @@ namespace Hexalyser.ViewModels
 
         #endregion Command_Close
         #endregion Commands
-        
+
+        #region MessageHandlers
+        #region SelectionChanged
+        protected void SelectionChanged(SelectionChangedMessage m)
+        {
+            if (m.Content.DocumentVm == this)
+            {
+                SelectedElement = m.Content.ElementVm;
+            }
+        }
+        #endregion SelectionChanged
+        #endregion MessageHandlers
+
         #region ProtectedProperties
         #endregion ProtectedProperties
 
@@ -68,6 +80,7 @@ namespace Hexalyser.ViewModels
             BuildElements();
 
             document.SequenceChanged += (d) => { BuildElements(); };
+            Messenger.Default.Register<SelectionChangedMessage>(this, SelectionChanged);
         }
         #endregion Constructors
 
@@ -79,13 +92,13 @@ namespace Hexalyser.ViewModels
                 switch (e)
                 {
                     case ElementUntyped elementUntyped:
-                        collection.Add(new ElementUntypedViewModel(e));
+                        collection.Add(new ElementUntypedViewModel(this, e));
                         break;
                     case ElementUInt16 elementUInt16:
-                        collection.Add(new ElementUInt16ViewModel(e));
+                        collection.Add(new ElementUInt16ViewModel(this, e));
                         break;
                     case ElementUInt32 elementUInt32:
-                        collection.Add(new ElementUInt32ViewModel(e));
+                        collection.Add(new ElementUInt32ViewModel(this, e));
                         break;
                 }
             }
