@@ -113,12 +113,19 @@ namespace Hexalyser.ViewModels
                 return;
             }
 
-            DocumentViewModel dVm = Documents[SelectedDocumentIndex];
-            Document d = dVm.Document;
-            ElementViewModel eVm = dVm.SelectedElement;
-            Element e = eVm.Element;
-            Document.InsertType[typeName](e, eVm.SelectionStart, eVm.SelectionLength);
-            StatusMessage = $"{DateTime.Now.ToString()}: Changed to {typeName} at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
+            try
+            {
+                DocumentViewModel dVm = Documents[SelectedDocumentIndex];
+                Document d = dVm.Document;
+                ElementViewModel eVm = dVm.SelectedElement;
+                Element e = eVm.Element;
+                Document.InsertType[typeName](e, eVm.SelectionStart, eVm.SelectionLength);
+                StatusMessage = $"{DateTime.Now.ToString()}: Changed to {typeName} at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"{DateTime.Now.ToString()}: Error. {ex.Message}";
+            }
         }
         
         private bool BasicTypeCanExecute()

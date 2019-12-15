@@ -9,7 +9,7 @@ namespace Hexalyser.Models
     public class Document
     {
         #region Fields
-        protected int ElementNameCount = 0;
+        protected int ElementNameCount = 0; // Used for name generation
         #endregion Fields
 
         #region Events
@@ -87,7 +87,7 @@ namespace Hexalyser.Models
         /// <typeparam name="T"></typeparam>
         /// <param name="src">The element to insert the new element into.</param>
         /// <param name="offset">In bytes, relative to the start of the src element.</param>
-        /// <param name="length">In bytes of the new element.</param>
+        /// <param name="length">In bytes of the new element. This will be rounded down to the largest number of complete items that fit.</param>
         /// <returns></returns>
         protected static Element Insert<T>(Element src, int offset, int length) where T : Element
         {
@@ -102,19 +102,21 @@ namespace Hexalyser.Models
             newElement.Name = GetAutoName(document);
             int bytesPerItem = newElement.BytesPerItem;
 
+            int actualLength = (length / bytesPerItem) * bytesPerItem; // Round down to the maximum number of complete items
+
             // Do we have enough bytes within the src element?
-            if (src.Length < offset + bytesPerItem)
+            if (actualLength == 0 || src.Length < offset + actualLength)
             {
-                throw new ArgumentOutOfRangeException(nameof(offset), src.Length - offset,
-                    $"There are not enough bytes in the buffer to insert type {typeof(T).Name}, {bytesPerItem} bytes are required.");
+                throw new ArgumentOutOfRangeException(nameof(length), length,
+                    $"There are not enough bytes in the buffer to insert type {newElement.TypeName}, a multiple of {bytesPerItem} bytes are required.");
             }
 
             int bytesBefore = offset;
-            int bytesMiddle = bytesPerItem;
-            int bytesAfter  = src.Length - offset - bytesPerItem;
+            int bytesMiddle = actualLength;
+            int bytesAfter  = src.Length - offset - actualLength;
 
             int offsetMiddle = offset;
-            int offsetAfter  = offset + bytesPerItem;
+            int offsetAfter  = offset + actualLength;
 
             newElement.Initialise(src.Offset + offsetMiddle, bytesMiddle);
 
