@@ -7,10 +7,17 @@ namespace Hexalyser.Models.Elements
     {
         public UInt32[] Values { get; set; }
 
-        public ElementUInt32(Document document, int offset, int length) : base(document, offset, length)
+        public ElementUInt32(Document document) : base(document)
         {
             TypeName = "UInt32";
-            Count.Text = $"{length / 4}";
+            BytesPerItem = 4;
+        }
+
+        public override void Initialise(int offset, int length)
+        {
+            Offset = offset;
+            Length = length;
+            Count.Text = $"{length / BytesPerItem}";
             UpdateValues();
         }
 
@@ -20,7 +27,7 @@ namespace Hexalyser.Models.Elements
             Values = new UInt32[count];
             for (int i = 0; i < count; i++)
             {
-                Values[i] = BitConverter.ToUInt32(Document.Buffer, Offset + i * 4);
+                Values[i] = BitConverter.ToUInt32(Document.Buffer, Offset + i * BytesPerItem);
             }
         }
 

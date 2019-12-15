@@ -8,6 +8,8 @@ namespace Hexalyser.Models.Elements
     /// </summary>
     public class Element
     {
+        public int BytesPerItem { get; protected set; }
+
         public string TypeName { get; protected set; }
         public string Name { get; set; } = "";
         public Expression Count { get; set; } = new Expression("1");
@@ -18,13 +20,16 @@ namespace Hexalyser.Models.Elements
         public int Offset { get; set; }
         public int Length { get; set; }
 
+
         public string Text => ToText();
 
-        public Element(Document document, int offset, int length)
+        public Element(Document document)
         {
             Document = document;
-            Offset = offset;
-            Length = length;
+        }
+
+        public virtual void Initialise(int offset, int length)
+        {
         }
 
         /// <summary>

@@ -54,7 +54,8 @@ namespace Hexalyser.Models
 
                 Buffer = File.ReadAllBytes(fileName);
                 Length = Buffer.Length;
-                FirstElement = new ElementUntyped(this, 0, Length);
+                FirstElement = new ElementUntyped(this);
+                FirstElement.Initialise(0, Length);
                 FirstElement.Name = GetAutoName(this);
             }
             catch (Exception e)
@@ -68,15 +69,16 @@ namespace Hexalyser.Models
             FileName = fileName;
             Name = Path.GetFileName(fileName);
             Length = buf.Length;
-            FirstElement = new ElementUntyped(this, 0, Length);
+            FirstElement = new ElementUntyped(this);
+            FirstElement.Initialise(0, Length);
         }
         #endregion Constructors
 
-        public static Dictionary<string, Func<Element, int, Element>> InsertType = new Dictionary<string, Func<Element, int, Element>>()
+        public static Dictionary<string, Func<Element, int, int, Element>> InsertType = new Dictionary<string, Func<Element, int, int, Element>>()
         {
-            {"uint8",  (src, offset) => Insert<ElementUInt8> (src, offset, 1)},
-            {"uint16", (src, offset) => Insert<ElementUInt16>(src, offset, 2)},
-            {"uint32", (src, offset) => Insert<ElementUInt32>(src, offset, 4)}
+            {"uint8",  Insert<ElementUInt8>},
+            {"uint16", Insert<ElementUInt16>},
+            {"uint32", Insert<ElementUInt32>}
         };
 
         /// <summary>
@@ -96,27 +98,31 @@ namespace Hexalyser.Models
             }
 
             Document document = src.Document;
+            Element newElement = (T)Activator.CreateInstance(typeof(T), document);
+            newElement.Name = GetAutoName(document);
+            int bytesPerItem = newElement.BytesPerItem;
 
             // Do we have enough bytes within the src element?
-            if (src.Length < offset + length)
+            if (src.Length < offset + bytesPerItem)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset), src.Length - offset,
-                    $"There are not enough bytes in the buffer to insert type {typeof(T).Name}, {length} bytes are required.");
+                    $"There are not enough bytes in the buffer to insert type {typeof(T).Name}, {bytesPerItem} bytes are required.");
             }
 
             int bytesBefore = offset;
-            int bytesMiddle = length;
-            int bytesAfter  = src.Length - offset - length;
+            int bytesMiddle = bytesPerItem;
+            int bytesAfter  = src.Length - offset - bytesPerItem;
 
             int offsetMiddle = offset;
-            int offsetAfter  = offset + length;
+            int offsetAfter  = offset + bytesPerItem;
 
-            Element newElement = (T)Activator.CreateInstance(typeof(T), document, src.Offset + offsetMiddle, bytesMiddle);
-            newElement.Name = GetAutoName(document);
+            newElement.Initialise(src.Offset + offsetMiddle, bytesMiddle);
 
             if (offsetMiddle > 0 && bytesAfter > 0)
             {
-                newElement.Append(new ElementUntyped(document, src.Offset + offsetAfter, bytesAfter) { Name = GetAutoName(document) });
+                ElementUntyped after = new ElementUntyped(document) {Name = GetAutoName(document)};
+                after.Initialise(src.Offset + offsetAfter, bytesAfter);
+                newElement.Append(after);
                 src.Length = bytesBefore;
                 src.Append(newElement);
             }

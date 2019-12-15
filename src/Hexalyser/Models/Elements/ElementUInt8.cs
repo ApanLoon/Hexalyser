@@ -7,16 +7,23 @@ namespace Hexalyser.Models.Elements
     {
         public OffsetArray<byte> Values { get; protected set; }
 
-        public ElementUInt8(Document document, int offset, int length) : base(document, offset, length)
+        public ElementUInt8(Document document) : base(document)
         {
             TypeName = "UInt8";
+            BytesPerItem = 1;
+        }
+
+        public override void Initialise(int offset, int length)
+        {
+            Offset = offset;
+            Length = length;
             Count.Text = $"{length}";
-            Values = new OffsetArray<byte>(document.Buffer, offset, length);
+            Values = new OffsetArray<byte>(Document.Buffer, offset, length);
         }
 
         public override string ToText()
         {
-            string s = $"<uint8 count=\"1\">\n    ";
+            string s = $"<{TypeName} count=\"1\">\n    ";
             int count = Count.Evaluate();
             for (int i = 0; i < count; i++)
             {
@@ -31,7 +38,7 @@ namespace Hexalyser.Models.Elements
                     s += "\n    ";
                 }
             }
-            s += $"</uint8>\n";
+            s += $"</{TypeName}>\n";
             return s;
         }
     }

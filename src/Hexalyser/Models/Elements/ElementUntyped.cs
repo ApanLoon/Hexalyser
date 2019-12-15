@@ -2,15 +2,21 @@
 {
     public class ElementUntyped : Element
     {
-        public ElementUntyped(Document document, int offset, int length) : base(document, offset, length)
+        public ElementUntyped(Document document) : base(document)
         {
             TypeName = "Untyped";
+        }
+
+        public override void Initialise(int offset, int length)
+        {
+            Offset = offset;
+            Length = length;
             Count.Text = $"{length}";
         }
 
         public override string ToText()
         {
-            string s = $"<untyped count=\"{Document.Buffer.Length}\">\n";
+            string s = $"<{TypeName} count=\"{Document.Buffer.Length}\">\n";
             int offset = 0;
             string line = "";
             string ascii = "";
@@ -44,7 +50,7 @@
             {
                 s += $"    {offset:x8}:{line,-50}  {ascii}\n";
             }
-            s += $"</untyped>\n";
+            s += $"</{TypeName}>\n";
             return s;
         }
 

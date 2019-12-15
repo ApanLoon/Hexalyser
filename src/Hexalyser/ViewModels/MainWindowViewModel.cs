@@ -117,7 +117,7 @@ namespace Hexalyser.ViewModels
             Document d = dVm.Document;
             ElementViewModel eVm = dVm.SelectedElement;
             Element e = eVm.Element;
-            Document.InsertType[typeName](e, eVm.SelectionStart); //TODO: Take multiples into account
+            Document.InsertType[typeName](e, eVm.SelectionStart, eVm.SelectionLength);
             StatusMessage = $"{DateTime.Now.ToString()}: Changed to {typeName} at {eVm.SelectionStart}({eVm.SelectionLength}) in element starting at {eVm.Element.Offset} in {d.Name}";
         }
         
