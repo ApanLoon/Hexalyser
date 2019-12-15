@@ -46,6 +46,10 @@ namespace Hexalyser.Models.Elements
                 element = element.NextElement;
             }
             element.NextElement = temp;
+            if (temp != null)
+            {
+                temp.PreviousElement = element;
+            }
         }
 
         /// <summary>
