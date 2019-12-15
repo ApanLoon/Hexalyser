@@ -94,6 +94,9 @@ namespace Hexalyser.ViewModels
                     case ElementUntyped elementUntyped:
                         collection.Add(new ElementUntypedViewModel(this, e));
                         break;
+                    case ElementUInt8 elementUInt8:
+                        collection.Add(new ElementUInt8ViewModel(this, e));
+                        break;
                     case ElementUInt16 elementUInt16:
                         collection.Add(new ElementUInt16ViewModel(this, e));
                         break;

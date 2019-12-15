@@ -74,6 +74,16 @@ namespace Hexalyser.ViewModels
         }
         private RelayCommand _commandTest;
         #endregion Command_Test
+        #region Command_UInt8
+        public RelayCommand CommandUInt8
+        {
+            get
+            {
+                return _commandUInt8 ??= new RelayCommand(() => { InsertType("uint8"); }, BasicTypeCanExecute);
+            }
+        }
+        private RelayCommand _commandUInt8;
+        #endregion Command_UInt8
         #region Command_UInt16
         public RelayCommand CommandUInt16
         {
@@ -193,6 +203,7 @@ namespace Hexalyser.ViewModels
                 Model = model;
 
                 #region BasicTypeCommands
+                BasicTypeCommands.Add(new Command() { Name = "UInt8",  Execute = CommandUInt8 });
                 BasicTypeCommands.Add(new Command() { Name = "UInt16", Execute = CommandUInt16 });
                 BasicTypeCommands.Add(new Command() { Name = "UInt32", Execute = CommandUInt32 });
                 #endregion BasicTypeCommands

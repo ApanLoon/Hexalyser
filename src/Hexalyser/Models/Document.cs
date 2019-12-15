@@ -74,6 +74,7 @@ namespace Hexalyser.Models
 
         public static Dictionary<string, Func<Element, int, Element>> InsertType = new Dictionary<string, Func<Element, int, Element>>()
         {
+            {"uint8",  (src, offset) => Insert<ElementUInt8> (src, offset, 1)},
             {"uint16", (src, offset) => Insert<ElementUInt16>(src, offset, 2)},
             {"uint32", (src, offset) => Insert<ElementUInt32>(src, offset, 4)}
         };
