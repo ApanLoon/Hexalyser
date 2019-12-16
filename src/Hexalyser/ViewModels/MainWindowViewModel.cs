@@ -120,6 +120,11 @@ namespace Hexalyser.ViewModels
             {
                 return _commandUntyped ??= new RelayCommand(() =>
                 {
+                    if (SelectedDocumentIndex < 0)
+                    {
+                        return;
+                    }
+
                     DocumentViewModel dVm = Documents[SelectedDocumentIndex];
 
                     if (dVm.SelectedElements.Count == 0)
@@ -149,6 +154,11 @@ namespace Hexalyser.ViewModels
             {
                 return _commandMerge ??= new RelayCommand(() =>
                 {
+                    if (SelectedDocumentIndex < 0)
+                    {
+                        return;
+                    }
+
                     DocumentViewModel dVm = Documents[SelectedDocumentIndex];
 
                     if (dVm.SelectedElements.Count < 2)
