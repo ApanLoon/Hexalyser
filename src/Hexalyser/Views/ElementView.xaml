@@ -13,7 +13,7 @@
             <Setter Property="TextBlock.Foreground" Value="#808080" />
         </Style>
         <Style x:Key="ElementName">
-            <Setter Property="TextBlock.Foreground" Value="White" />
+            <Setter Property="TextBlock.Foreground" Value="DarkGray" />
         </Style>
         <Style x:Key="AttributeName">
             <Setter Property="TextBlock.Foreground" Value="#69c8f2" />
@@ -21,6 +21,11 @@
         </Style>
         <Style x:Key="AttributeValue">
             <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+            <Setter Property="TextBox.Foreground" Value="#569cd6" />
+            <Setter Property="TextBox.Background" Value="Transparent" />
+            <Setter Property="TextBox.BorderThickness" Value="0" />
+            <Setter Property="TextBox.Padding" Value="-2 0 -2 0" />
+            <Setter Property="TextBox.Margin" Value="0" />
         </Style>
     </UserControl.Resources>
 
@@ -30,7 +35,7 @@
             <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
             <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
             <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-            <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
+            <TextBox   Style="{StaticResource AttributeValue}" Text="{Binding Name, Mode=TwoWay}" />
             <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
             <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource AttributeName}">Count</TextBlock>
             <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource XmlOperator}">="</TextBlock>
