@@ -7,6 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:elements="clr-namespace:Hexalyser.ViewModels.Elements"
              xmlns:wpfTextBoxBindableSelection="clr-namespace:WpfTextBoxBindableSelection"
+             xmlns:views="clr-namespace:Hexalyser.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -59,6 +60,7 @@
             <Setter Property="Foreground" Value="#f1f1f1" />
         </Style>
     </UserControl.Resources>
+
     <Grid Style="{StaticResource Background}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -86,98 +88,42 @@
                 </ListView.Template>
                 <ListView.Resources>
                     <DataTemplate DataType="{x:Type elements:ElementUntypedViewModel}">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource Addresses}" Text="{Binding Addresses}" />
-                                <wpfTextBoxBindableSelection:TextBox Style="{StaticResource Bytes}"
-                                                                     Text="{Binding Path=Bytes, Mode=OneWay}"
-                                                                     SelectionStartBindable="{Binding SelectionStartRaw, Mode=OneWayToSource}"
-                                                                     SelectionLengthBindable="{Binding SelectionLengthRaw, Mode=OneWayToSource}"/>
-                                <TextBlock Style="{StaticResource Ascii}"     Text="{Binding Ascii}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                        <views:ElementView CountVisibility="Collapsed">
+                            <views:ElementView.ValueContent>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource Addresses}" Text="{Binding Addresses}" />
+                                    <wpfTextBoxBindableSelection:TextBox Style="{StaticResource Bytes}"
+                                                                         Text="{Binding Path=Bytes, Mode=OneWay}"
+                                                                         SelectionStartBindable="{Binding SelectionStartRaw, Mode=OneWayToSource}"
+                                                                         SelectionLengthBindable="{Binding SelectionLengthRaw, Mode=OneWayToSource}"/>
+                                    <TextBlock Style="{StaticResource Ascii}" Text="{Binding Ascii}" />
+                                </StackPanel>
+                            </views:ElementView.ValueContent>
+                        </views:ElementView>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type elements:ElementUInt8ViewModel}">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeName}">Count</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
-                            </StackPanel>
-                            <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                        <views:ElementView>
+                            <views:ElementView.ValueContent>
+                                <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
+                            </views:ElementView.ValueContent>
+                        </views:ElementView>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type elements:ElementUInt16ViewModel}">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeName}">Count</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
-                            </StackPanel>
-                            <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                        <views:ElementView>
+                            <views:ElementView.ValueContent>
+                                <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
+                            </views:ElementView.ValueContent>
+                        </views:ElementView>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type elements:ElementUInt32ViewModel}">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeName}">Count</TextBlock>
-                                <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
-                                <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">"&gt;</TextBlock>
-                            </StackPanel>
-                            <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
-                                <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
-                                <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                        <views:ElementView>
+                            <views:ElementView.ValueContent>
+                                <TextBlock Text="{Binding Values}" Style="{StaticResource Values}" />
+                            </views:ElementView.ValueContent>
+                        </views:ElementView>
                     </DataTemplate>
 
                 </ListView.Resources>

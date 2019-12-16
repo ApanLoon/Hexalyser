@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Hexalyser.Views.ElementView"
+             Name="Control"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Hexalyser.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="XmlOperator">
+            <Setter Property="TextBlock.Foreground" Value="#808080" />
+        </Style>
+        <Style x:Key="ElementName">
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+        <Style x:Key="AttributeName">
+            <Setter Property="TextBlock.Foreground" Value="#69c8f2" />
+            <Setter Property="TextBlock.Margin" Value="10, 0, 0, 0" />
+        </Style>
+        <Style x:Key="AttributeValue">
+            <Setter Property="TextBlock.Foreground" Value="#569cd6" />
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource XmlOperator}">&lt;</TextBlock>
+            <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+            <TextBlock Style="{StaticResource AttributeName}">Name</TextBlock>
+            <TextBlock Style="{StaticResource XmlOperator}">="</TextBlock>
+            <TextBlock Style="{StaticResource AttributeValue}" Text="{Binding Name}" />
+            <TextBlock Style="{StaticResource XmlOperator}">"</TextBlock>
+            <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource AttributeName}">Count</TextBlock>
+            <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource XmlOperator}">="</TextBlock>
+            <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource AttributeValue}" Text="{Binding Count}" />
+            <TextBlock Visibility="{Binding CountVisibility, ElementName=Control}" Style="{StaticResource XmlOperator}">"</TextBlock>
+            <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
+        </StackPanel>
+        <ContentPresenter Content="{Binding ValueContent, ElementName=Control}" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource XmlOperator}">&lt;/</TextBlock>
+            <TextBlock Text="{Binding TypeName}" Style="{StaticResource ElementName}" />
+            <TextBlock Style="{StaticResource XmlOperator}">&gt;</TextBlock>
+        </StackPanel>
+    </StackPanel>
+
+</UserControl>
